@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kuis 1 MK 5 Kedokteran Berbasis Bukti pada KKLP</title>
+<style>
+:root{--navy:#1F3864;--navy2:#2E4A7D;--line:#C9D3E3;--bg:#F4F6FA;--card:#FFFFFF;--text:#1B2433;--muted:#5B6678;--ok:#1E7B4A;--warn:#9A5B00;--bad:#B3261E;--sel:#E6EDF8}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+header.top{background:var(--navy);color:#fff;padding:12px 16px;display:flex;gap:12px;align-items:center}
+header.top img{width:40px;height:40px;border-radius:4px;background:#fff}
+header.top .t1{font-weight:700;font-size:15px}
+header.top .t2{font-size:13px;opacity:.9}
+main{max-width:860px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px;margin:0 0 16px}
+h1{font-size:22px;margin:0 0 6px;color:var(--navy)}
+h2{font-size:18px;margin:0 0 8px;color:var(--navy)}
+.muted{color:var(--muted);font-size:14px}
+label.f{display:block;font-weight:600;margin:12px 0 4px}
+input[type=text]{width:100%;font-size:16px;padding:10px 12px;border:1px solid #9AA8BF;border-radius:8px}
+input[type=text]:focus{outline:3px solid #9DB6E3;border-color:var(--navy2)}
+.chk{display:flex;gap:10px;align-items:flex-start;margin:14px 0 4px;font-size:15px}
+.chk input{width:20px;height:20px;margin-top:2px;flex:none}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--navy);padding:10px 16px;min-height:44px}
+button.pri{background:var(--navy);color:#fff;font-weight:600}
+button.sec{background:#fff;color:var(--navy)}
+button.lnk{background:none;border:none;color:var(--muted);text-decoration:underline;font-size:13px;padding:6px;min-height:0}
+button:disabled{opacity:.55;cursor:not-allowed}
+.err{color:var(--bad);font-size:14px;margin-top:6px;min-height:1px}
+.box{border-left:4px solid var(--navy2);background:var(--sel);padding:10px 12px;border-radius:6px;font-size:14px;margin:10px 0}
+.box.warn{border-color:var(--warn);background:#FFF4E0}
+.box.bad{border-color:var(--bad);background:#FDECEA}
+ul.rules{margin:6px 0 0 18px;padding:0;font-size:14px}
+.bar{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--line);padding:8px 16px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+.bar .who{font-size:13px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100%}
+.bar .sisa{display:flex;align-items:baseline;gap:6px}
+.bar .timer{font-weight:700;font-variant-numeric:tabular-nums;font-size:18px;color:var(--navy)}
+.bar .timer.lo{color:var(--bad)}
+.nav{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
+.nav a{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--navy);text-decoration:none;font-weight:600;font-size:14px}
+.nav a.part{border-color:var(--warn);background:#FFF4E0}
+.nav a.full{border-color:var(--ok);background:#E5F4EC}
+.stem{margin:6px 0 10px;white-space:pre-wrap}
+.st{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:center;padding:10px 0;border-top:1px solid #E6EAF1}
+.st .tx{min-width:0}
+.st .tx b{color:var(--navy)}
+.opts{display:flex;gap:6px}
+.opts label{display:inline-flex;align-items:center;gap:6px;border:1px solid #9AA8BF;border-radius:8px;padding:8px 12px;min-height:44px;cursor:pointer;user-select:none;background:#fff}
+.opts input{width:18px;height:18px;margin:0}
+.opts label.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.alert{position:sticky;top:60px;z-index:4}
+table.res{width:100%;border-collapse:collapse;font-size:15px}
+table.res th,table.res td{border:1px solid var(--line);padding:6px 8px;text-align:center}
+table.res th{background:#E3E9F3}
+table.res td.l{text-align:left}
+.total{font-size:28px;font-weight:800;color:var(--navy);margin:8px 0}
+.kv{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:4px 12px;font-size:15px}
+.kv div:nth-child(odd){color:var(--muted)}
+.modal{position:fixed;inset:0;background:rgba(10,20,40,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+.modal .card{max-width:520px;width:100%;margin:0}
+.row{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+footer{max-width:860px;margin:0 auto;padding:4px 16px 24px;text-align:right}
+@media (max-width:560px){.st{grid-template-columns:1fr}.opts label{flex:1;justify-content:center}.kv{grid-template-columns:1fr}.kv div:nth-child(odd){margin-top:6px}main{padding:12px}}
+@media print{.bar,.nav,button,footer{display:none!important}}
+</style>
+</head>
+<body>
+<header class="top"><img id="logo" alt="Logo UPH"><div><div class="t1">Universitas Pelita Harapan · Fakultas Kedokteran · Prodi Sp.KKLP</div><div class="t2" id="subjudul"></div></div></header>
+<div id="app"><main><div class="card">Memuat aplikasi kuis…</div><noscript><div class="card">Aplikasi ini memerlukan JavaScript.</div></noscript></main></div>
+<footer id="foot"></footer>
+<script>
+(function () {
+"use strict";
+// Pustaka bersama aplikasi Kuis MK 5 dan alat rekap dosen (tanpa dependensi luar).
+// Isi: SHA-256, HMAC-SHA256, PBKDF2-HMAC-SHA256, dekripsi HMAC-CTR + MAC, rekaman hasil, kode verifikasi,
+// format tanggal WIB, dan penulis PDF satu halaman (Helvetica, WinAnsiEncoding).
+"use strict";
+var MK5 = (function () {
+  // ---------- SHA-256 ----------
+  var K = new Uint32Array([0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5, 0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174, 0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da, 0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967, 0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85, 0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070, 0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3, 0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2]);
+  var IV = new Uint32Array([0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19]);
+  var Wk = new Uint32Array(64);
+  function compress(H, w) {
+    var i, a, b, c, d, e, f, g, h, t1, t2, x, y;
+    for (i = 0; i < 16; i++) Wk[i] = w[i];
+    for (i = 16; i < 64; i++) {
+      x = Wk[i - 15]; y = Wk[i - 2];
+      Wk[i] = (((x >>> 7) | (x << 25)) ^ ((x >>> 18) | (x << 14)) ^ (x >>> 3)) + (((y >>> 17) | (y << 15)) ^ ((y >>> 19) | (y << 13)) ^ (y >>> 10)) + Wk[i - 7] + Wk[i - 16];
+    }
+    a = H[0]; b = H[1]; c = H[2]; d = H[3]; e = H[4]; f = H[5]; g = H[6]; h = H[7];
+    for (i = 0; i < 64; i++) {
+      t1 = (h + (((e >>> 6) | (e << 26)) ^ ((e >>> 11) | (e << 21)) ^ ((e >>> 25) | (e << 7))) + ((e & f) ^ (~e & g)) + K[i] + Wk[i]) | 0;
+      t2 = ((((a >>> 2) | (a << 30)) ^ ((a >>> 13) | (a << 19)) ^ ((a >>> 22) | (a << 10))) + ((a & b) ^ (a & c) ^ (b & c))) | 0;
+      h = g; g = f; f = e; e = (d + t1) | 0; d = c; c = b; b = a; a = (t1 + t2) | 0;
+    }
+    H[0] += a; H[1] += b; H[2] += c; H[3] += d; H[4] += e; H[5] += f; H[6] += g; H[7] += h;
+  }
+  function wordsToBytes(H) { var o = new Uint8Array(32); for (var i = 0; i < 8; i++) { o[i * 4] = H[i] >>> 24; o[i * 4 + 1] = (H[i] >>> 16) & 255; o[i * 4 + 2] = (H[i] >>> 8) & 255; o[i * 4 + 3] = H[i] & 255; } return o; }
+  // hash dengan status awal (untuk HMAC) dan panjang awalan yang sudah diproses (bita)
+  function shaWords(bytes, init, prefixLen) {
+    var len = bytes.length, total = (len + (prefixLen || 0)) * 8;
+    var n = Math.ceil((len + 9) / 64), buf = new Uint8Array(n * 64);
+    buf.set(bytes); buf[len] = 0x80;
+    var dv = new DataView(buf.buffer);
+    dv.setUint32(buf.length - 8, Math.floor(total / 4294967296)); dv.setUint32(buf.length - 4, total >>> 0);
+    var H = new Uint32Array(init || IV), w = new Uint32Array(16);
+    for (var b = 0; b < n; b++) { for (var i = 0; i < 16; i++) w[i] = dv.getUint32(b * 64 + i * 4); compress(H, w); }
+    return H;
+  }
+  function sha256(bytes) { return wordsToBytes(shaWords(bytes)); }
+  function hmacPrep(key) {
+    if (key.length > 64) key = sha256(key);
+    var k = new Uint8Array(64); k.set(key);
+    var ip = new Uint32Array(16), op = new Uint32Array(16), dv = new DataView(k.buffer);
+    for (var i = 0; i < 16; i++) { var v = dv.getUint32(i * 4); ip[i] = v ^ 0x36363636; op[i] = v ^ 0x5c5c5c5c; }
+    var hi = new Uint32Array(IV), ho = new Uint32Array(IV); compress(hi, ip); compress(ho, op);
+    return { i: hi, o: ho };
+  }
+  function hmacWithPrep(p, msg) { var inner = wordsToBytes(shaWords(msg, p.i, 64)); return wordsToBytes(shaWords(inner, p.o, 64)); }
+  function hmac(key, msg) { return hmacWithPrep(hmacPrep(key), msg); }
+  var blkI = new Uint32Array(16), blkO = new Uint32Array(16);
+  function hmac32(p, U) { // HMAC atas pesan 32 bita (8 kata), dua kompresi
+    var i, h = new Uint32Array(p.i);
+    for (i = 0; i < 8; i++) blkI[i] = U[i]; blkI[8] = 0x80000000; for (i = 9; i < 15; i++) blkI[i] = 0; blkI[15] = 768;
+    compress(h, blkI);
+    var g = new Uint32Array(p.o);
+    for (i = 0; i < 8; i++) blkO[i] = h[i]; blkO[8] = 0x80000000; for (i = 9; i < 15; i++) blkO[i] = 0; blkO[15] = 768;
+    compress(g, blkO);
+    return g;
+  }
+  function pbkdf2(pass, salt, iter, dkLen) {
+    var p = hmacPrep(pass), nb = Math.ceil(dkLen / 32), out = new Uint8Array(nb * 32);
+    for (var bi = 1; bi <= nb; bi++) {
+      var m = new Uint8Array(salt.length + 4); m.set(salt); new DataView(m.buffer).setUint32(salt.length, bi);
+      var u8 = hmacWithPrep(p, m), dv = new DataView(u8.buffer), U = new Uint32Array(8);
+      for (var k = 0; k < 8; k++) U[k] = dv.getUint32(k * 4);
+      var T = new Uint32Array(U);
+      for (var j = 1; j < iter; j++) { U = hmac32(p, U); for (k = 0; k < 8; k++) T[k] ^= U[k]; }
+      out.set(wordsToBytes(T), (bi - 1) * 32);
+    }
+    return out.subarray(0, dkLen);
+  }
+  // ---------- pengodean ----------
+  function utf8(s) { return new TextEncoder().encode(s); }
+  function unutf8(b) { return new TextDecoder("utf-8", { fatal: true }).decode(b); }
+  function b64d(s) { var bin = atob(s), o = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) o[i] = bin.charCodeAt(i); return o; }
+  function b64e(b) { var s = ""; for (var i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); }
+  function hex(b) { var s = ""; for (var i = 0; i < b.length; i++) s += (b[i] < 16 ? "0" : "") + b[i].toString(16); return s; }
+  function concat(a, b) { var o = new Uint8Array(a.length + b.length); o.set(a); o.set(b, a.length); return o; }
+  function sameBytes(a, b) { if (a.length !== b.length) return false; var d = 0; for (var i = 0; i < a.length; i++) d |= a[i] ^ b[i]; return d === 0; }
+  function normKode(s) { return String(s || "").toUpperCase().replace(/[^A-Z0-9]/g, ""); }
+  // ---------- dekripsi (pasangan Python: kripto.py) ----------
+  function bukaBlob(kode, blob) {
+    var k = normKode(kode); if (!k) return null;
+    var dk = pbkdf2(utf8(k), b64d(blob.s), blob.i, 64), enc = dk.slice(0, 32), mac = dk.slice(32, 64);
+    var nonce = b64d(blob.n), ct = b64d(blob.c);
+    if (!sameBytes(hmac(mac, concat(nonce, ct)), b64d(blob.m))) return null;
+    var pe = hmacPrep(enc), pt = new Uint8Array(ct.length), ctr = new Uint8Array(nonce.length + 4);
+    ctr.set(nonce);
+    for (var i = 0; i * 32 < ct.length; i++) {
+      new DataView(ctr.buffer).setUint32(nonce.length, i);
+      var ks = hmacWithPrep(pe, ctr);
+      for (var j = 0; j < 32 && i * 32 + j < ct.length; j++) pt[i * 32 + j] = ct[i * 32 + j] ^ ks[j];
+    }
+    try { return JSON.parse(unutf8(pt)); } catch (e) { return null; }
+  }
+  function cocokVerifier(kode, ver) { var k = normKode(kode); if (!k) return false; return hex(pbkdf2(utf8(k), b64d(ver.s), ver.i, 32)) === ver.h; }
+
+  // ---------- penilaian ----------
+  // jawaban: string 4n karakter 'B', 'S', atau '-' (kosong); kunci: string 4n karakter 'B'/'S'
+  function nilai(jawaban, kunci) {
+    var n = kunci.length / 4, skor = [], benar = [], tot = 0;
+    for (var i = 0; i < n; i++) {
+      var c = 0;
+      for (var j = 0; j < 4; j++) if (jawaban.charAt(i * 4 + j) === kunci.charAt(i * 4 + j)) c++;
+      benar.push(c); skor.push(25 * c); tot += 25 * c;
+    }
+    return { benar: benar, skor: skor, total: Math.round((tot / n) * 100) / 100 };
+  }
+  function angkaID(x) { var s = (Math.round(x * 100) / 100).toString(); return s.replace(".", ","); }
+
+  // ---------- waktu WIB (UTC+7, tanpa bergantung zona waktu perangkat) ----------
+  var HARI = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  var BULAN = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+  function p2(n) { return (n < 10 ? "0" : "") + n; }
+  function wib(ms) {
+    var d = new Date(ms + 7 * 3600000);
+    return HARI[d.getUTCDay()] + ", " + d.getUTCDate() + " " + BULAN[d.getUTCMonth()] + " " + d.getUTCFullYear() + " pukul " + p2(d.getUTCHours()) + "." + p2(d.getUTCMinutes()) + "." + p2(d.getUTCSeconds()) + " WIB";
+  }
+  function durasiTeks(det) { det = Math.max(0, Math.round(det)); return Math.floor(det / 60) + " menit " + (det % 60) + " detik"; }
+
+  // ---------- rekaman hasil dan kode verifikasi ----------
+  var URUT = ["v", "app", "kuis", "build", "nama", "npm", "jawaban", "skor", "total", "mulai", "selesai", "durasi_detik", "otomatis", "keluar_halaman", "jam_anomali", "mode", "percobaan_id", "reset"];
+  function kanonik(r) { var o = {}; URUT.forEach(function (k) { o[k] = r[k]; }); return JSON.stringify(o); }
+  function kodeVerifikasi(r) { var h = hex(sha256(utf8(kanonik(r)))).slice(0, 16).toUpperCase(); return h.slice(0, 4) + "-" + h.slice(4, 8) + "-" + h.slice(8, 12) + "-" + h.slice(12, 16); }
+
+  // ---------- teks yang tampil pada PDF (dipakai juga oleh alat verifikasi) ----------
+  function teksPDF(r, meta) {
+    var jw = function (i) { var s = []; for (var j = 0; j < 4; j++) { var c = r.jawaban.charAt(i * 4 + j); s.push("abcd".charAt(j) + ": " + (c === "-" ? "kosong" : c)); } return s.join("   "); };
+    var baris = [];
+    for (var i = 0; i < meta.butir.length; i++) baris.push({ no: String(i + 1), sub: meta.butir[i].sub, jaw: jw(i), benar: (r.skor[i] / 25) + " dari 4", skor: String(r.skor[i]) });
+    return {
+      judul: "HASIL " + meta.nama.toUpperCase(),
+      sub: "MK 5 Kedokteran Berbasis Bukti pada KKLP | Semester Ganjil 2026/2027 | Sesi " + meta.sesi + ", " + meta.tanggal,
+      identitas: [["Nama", r.nama], ["NPM", r.npm], ["Mulai", wib(r.mulai)], ["Selesai", wib(r.selesai)], ["Lama pengerjaan", durasiTeks(r.durasi_detik)],
+        ["Cara selesai", r.otomatis ? "Dikumpulkan otomatis karena waktu habis" : "Dikumpulkan oleh mahasiswa"],
+        ["Meninggalkan halaman kuis", r.keluar_halaman + " kali"], ["Jam perangkat dimundurkan", (r.jam_anomali || 0) + " kali"], ["Mode aplikasi", r.mode === "scorm" ? "SCORM di Moodle" : "Berkas HTML mandiri"],
+        ["ID percobaan", r.percobaan_id + (r.reset > 0 ? " (setelah " + r.reset + " kali reset oleh dosen)" : "")]],
+      baris: baris,
+      total: "Nilai " + meta.nama + ": " + angkaID(r.total),
+      kode: "Kode verifikasi: " + kodeVerifikasi(r),
+    };
+  }
+
+  // ---------- penulis PDF ----------
+  var WIN = { 0x20ac: 128, 0x201a: 130, 0x192: 131, 0x201e: 132, 0x2026: 133, 0x2020: 134, 0x2021: 135, 0x2c6: 136, 0x2030: 137, 0x160: 138, 0x2039: 139, 0x152: 140, 0x17d: 142, 0x2018: 145, 0x2019: 146, 0x201c: 147, 0x201d: 148, 0x2022: 149, 0x2013: 150, 0x2014: 151, 0x2dc: 152, 0x2122: 153, 0x161: 154, 0x203a: 155, 0x153: 156, 0x17e: 158, 0x178: 159 };
+  var ALIH = { 0x110: "D", 0x111: "d", 0x141: "L", 0x142: "l", 0x131: "i", 0x126: "H", 0x127: "h", 0x166: "T", 0x167: "t" };
+  function keWin(s) { // kembalikan array bita cp1252
+    var out = [], t = String(s).normalize("NFC");
+    for (var ch of t) {
+      var c = ch.codePointAt(0);
+      if (c >= 32 && c < 127) out.push(c);
+      else if (c >= 160 && c <= 255) out.push(c);
+      else if (WIN[c]) out.push(WIN[c]);
+      else {
+        if (ALIH[c]) { out.push(ALIH[c].charCodeAt(0)); continue; }
+        var base = ch.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        var b = base.codePointAt(0);
+        out.push(base.length === 1 && b >= 32 && b < 127 ? b : 63);
+      }
+    }
+    return out;
+  }
+  var ASCII = { "Œ": "OE", "œ": "oe", "Æ": "AE", "æ": "ae", "ß": "ss", "Ø": "O", "ø": "o", "Đ": "D", "đ": "d", "Ł": "L", "ł": "l", "ı": "i", "Þ": "Th", "þ": "th", "Ð": "D", "ð": "d", "Ħ": "H", "ħ": "h" };
+  function keASCII(s) { return String(s).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\x00-\x7f]/g, function (c) { return ASCII[c] || ""; }); }
+  function lebar(s, W, size) { var b = keWin(s), w = 0; for (var i = 0; i < b.length; i++) w += W[b[i]]; return (w * size) / 1000; }
+  function pecah(s, W, size, maks) {
+    var kata = String(s).split(/\s+/), baris = [], cur = "";
+    kata.forEach(function (k) {
+      var coba = cur ? cur + " " + k : k;
+      if (lebar(coba, W, size) <= maks) { cur = coba; return; }
+      if (cur) baris.push(cur);
+      while (lebar(k, W, size) > maks) { var n = k.length; while (n > 1 && lebar(k.slice(0, n), W, size) > maks) n--; baris.push(k.slice(0, n)); k = k.slice(n); }
+      cur = k;
+    });
+    if (cur) baris.push(cur);
+    return baris.length ? baris : [""];
+  }
+  function strPDF(s) {
+    var b = keWin(s), o = "(";
+    for (var i = 0; i < b.length; i++) { var c = b[i]; if (c === 40 || c === 41 || c === 92) o += "\\" + String.fromCharCode(c); else if (c < 127) o += String.fromCharCode(c); else o += "\\" + ("00" + c.toString(8)).slice(-3); }
+    return o + ")";
+  }
+  function f2(x) { return (Math.round(x * 100) / 100).toString(); }
+  // buat PDF; kembalikan Uint8Array
+  function buatPDF(r, meta, aset) {
+    var T = teksPDF(r, meta), HW = aset.lebar.Helvetica, HB = aset.lebar["Helvetica-Bold"];
+    var c = []; // perintah isi halaman
+    var tx = function (x, y, s, bold, size) { c.push("BT /" + (bold ? "F2" : "F1") + " " + size + " Tf " + f2(x) + " " + f2(y) + " Td " + strPDF(s) + " Tj ET"); };
+    var ln = function (x1, y1, x2, y2, w) { c.push(f2(w || 0.6) + " w " + f2(x1) + " " + f2(y1) + " m " + f2(x2) + " " + f2(y2) + " l S"); };
+    var fill = function (x, y, w, h, g) { c.push(g + " g " + f2(x) + " " + f2(y) + " " + f2(w) + " " + f2(h) + " re f 0 g"); };
+    var L = 48, R = 547, y = 790;
+    c.push("q 44 0 0 44 " + L + " 760 cm /Im1 Do Q");
+    tx(L + 54, 790, "UNIVERSITAS PELITA HARAPAN | FAKULTAS KEDOKTERAN", true, 10.5);
+    tx(L + 54, 776, "Program Studi Spesialis Kedokteran Keluarga Layanan Primer (Sp.KKLP)", false, 9);
+    tx(L + 54, 764, "True Knowledge, Faith in Christ, Godly Character", false, 8);
+    ln(L, 752, R, 752, 1);
+    y = 728; tx(L, y, T.judul, true, 15);
+    y -= 16; pecah(T.sub, HW, 9, R - L).forEach(function (s) { tx(L, y, s, false, 9); y -= 11; });
+    // identitas
+    y -= 8; var col = 150;
+    T.identitas.forEach(function (row, i) {
+      var lines = pecah(row[1], i < 2 ? HB : HW, 9.5, R - L - col - 8), h = 6 + lines.length * 12;
+      if (i % 2 === 0) fill(L, y - h + 9, R - L, h, 0.95);
+      tx(L + 4, y, row[0], true, 9.5);
+      lines.forEach(function (s, k) { tx(L + col, y - k * 12, s, i < 2, 9.5); });
+      y -= h;
+    });
+    // tabel butir
+    y -= 10; var cx = [L, L + 40, L + 100, L + 380, L + 445, R], hh = 16;
+    fill(L, y - 5, R - L, hh, 0.85);
+    ["Butir", "Sub-CPMK", "Jawaban mahasiswa", "Benar", "Skor butir"].forEach(function (h, i) { tx(cx[i] + 4, y, h, true, 9); });
+    var top = y + hh - 5; y -= hh;
+    T.baris.forEach(function (b) {
+      tx(cx[0] + 4, y, b.no, false, 9); tx(cx[1] + 4, y, b.sub, false, 9); tx(cx[2] + 4, y, b.jaw, false, 9); tx(cx[3] + 4, y, b.benar, false, 9); tx(cx[4] + 4, y, b.skor, true, 9);
+      ln(L, y - 5, R, y - 5, 0.3); y -= hh;
+    });
+    var bot = y + hh - 5;
+    cx.forEach(function (x) { ln(x, top, x, bot, 0.5); }); ln(L, top, R, top, 0.5); ln(L, bot, R, bot, 0.8);
+    y -= 6; fill(L, y - 7, R - L, 22, 0.9); tx(L + 6, y, T.total, true, 13); y -= 26;
+    var cat = ["Skor butir = 25 x jumlah pernyataan yang dijawab benar (0, 25, 50, 75, atau 100); pernyataan yang tidak dijawab bernilai 0 tanpa pengurangan. Nilai kuis = rerata skor 10 butir (Lampiran 4 RPS MK 5).",
+      "Berkas ini dibuat otomatis oleh aplikasi " + meta.nama + " MK 5. Unggah berkas ini tanpa diubah ke tugas Moodle yang ditentukan dosen. Isi berkas diperiksa dosen dengan alat verifikasi; perubahan isi akan terdeteksi.",
+      "Kunci jawaban dan pembahasan dibagikan dosen setelah kuis ditutup."];
+    cat.forEach(function (s) { pecah(s, HW, 8.5, R - L).forEach(function (t) { tx(L, y, t, false, 8.5); y -= 10.5; }); y -= 4; });
+    y -= 4; tx(L, y, T.kode, true, 10);
+    tx(L, 40, meta.nama + " MK 5 | " + r.npm + " | dibuat " + wib(r.selesai), false, 7.5);
+    var isi = c.join("\n");
+    var info = "<< /Title " + strPDF("Hasil " + meta.nama + " MK 5 - " + r.npm) + " /Author " + strPDF(r.nama) + " /Creator (Aplikasi Kuis MK 5 Sp.KKLP FK UPH) /Producer (MK5 lib.js) >>";
+    var jpg = aset.logo;
+    var objs = [
+      "<< /Type /Catalog /Pages 2 0 R >>",
+      "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+      "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> /XObject << /Im1 7 0 R >> >> /Contents 6 0 R >>",
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>",
+      "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>",
+      { stream: isi },
+      { img: jpg },
+      info,
+    ];
+    var parts = [], off = [], pos = 0;
+    var push = function (x) { var b = typeof x === "string" ? latin1(x) : x; parts.push(b); pos += b.length; };
+    function latin1(s) { var o = new Uint8Array(s.length); for (var i = 0; i < s.length; i++) o[i] = s.charCodeAt(i) & 255; return o; }
+    push("%PDF-1.4\n%\xe2\xe3\xcf\xd3\n%MK5KUIS-DATA:" + b64e(utf8(JSON.stringify(r))) + "\n");
+    objs.forEach(function (o, i) {
+      off.push(pos);
+      if (typeof o === "string") push((i + 1) + " 0 obj\n" + o + "\nendobj\n");
+      else if (o.stream !== undefined) push((i + 1) + " 0 obj\n<< /Length " + o.stream.length + " >>\nstream\n" + o.stream + "\nendstream\nendobj\n");
+      else { push((i + 1) + " 0 obj\n<< /Type /XObject /Subtype /Image /Width " + aset.logoW + " /Height " + aset.logoH + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length " + o.img.length + " >>\nstream\n"); push(o.img); push("\nendstream\nendobj\n"); }
+    });
+    var xref = pos, xs = "xref\n0 " + (objs.length + 1) + "\n0000000000 65535 f \n";
+    off.forEach(function (o) { xs += ("0000000000" + o).slice(-10) + " 00000 n \n"; });
+    push(xs + "trailer\n<< /Size " + (objs.length + 1) + " /Root 1 0 R /Info 8 0 R >>\nstartxref\n" + xref + "\n%%EOF\n");
+    var out = new Uint8Array(pos), p = 0; parts.forEach(function (b) { out.set(b, p); p += b.length; });
+    return out;
+  }
+  // ---------- pembaca PDF hasil (alat dosen) ----------
+  function bacaPDF(bytes) {
+    var s = ""; for (var i = 0; i < bytes.length; i += 0x8000) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    var hasil = { rekaman: null, teks: null, galat: null };
+    var m = /%MK5KUIS-DATA:([A-Za-z0-9+\/=]+)/.exec(s);
+    if (!m) { hasil.galat = "Data hasil tidak ditemukan dalam berkas (bukan PDF dari aplikasi kuis, atau berkas telah disimpan ulang)"; return hasil; }
+    try { hasil.rekaman = JSON.parse(unutf8(b64d(m[1]))); } catch (e) { hasil.galat = "Data hasil rusak"; return hasil; }
+    var st = /6 0 obj\n<< \/Length (\d+) >>\nstream\n/.exec(s);
+    if (st) {
+      var isi = s.substr(st.index + st[0].length, +st[1]), teks = [], re = /\(((?:\\.|[^\\)])*)\) Tj/g, mm;
+      while ((mm = re.exec(isi))) teks.push(mm[1].replace(/\\([0-7]{3}|.)/g, function (_, e) { return e.length === 3 ? String.fromCharCode(parseInt(e, 8)) : e; }));
+      hasil.teks = teks;
+    }
+    return hasil;
+  }
+  return { sha256: sha256, hmac: hmac, pbkdf2: pbkdf2, utf8: utf8, b64d: b64d, b64e: b64e, hex: hex, normKode: normKode, bukaBlob: bukaBlob, cocokVerifier: cocokVerifier,
+    nilai: nilai, angkaID: angkaID, wib: wib, durasiTeks: durasiTeks, kanonik: kanonik, kodeVerifikasi: kodeVerifikasi, teksPDF: teksPDF, keWin: keWin, keASCII: keASCII, strPDF: strPDF, buatPDF: buatPDF, bacaPDF: bacaPDF };
+})();
+if (typeof module !== "undefined") module.exports = MK5;
+
+var DATA = {"meta":{"kuis":"Q1","nama":"Kuis 1","sesi":4,"tanggal":"Jumat, 6 November 2026","durasi_menit":20,"butir":[{"no":"1","sub":"1.1"},{"no":"2","sub":"1.2"},{"no":"3","sub":"1.2"},{"no":"4","sub":"1.3"},{"no":"5","sub":"1.4"},{"no":"6","sub":"3.1"},{"no":"7","sub":"3.1"},{"no":"8","sub":"3.1"},{"no":"9","sub":"3.4"},{"no":"10","sub":"3.4"}],"build":"C7AA3B28"},"soal":{"s":"gtTbIVHvTwW3l0W+7eWT0Q==","n":"7SL3k9KVUd9SkCPzltfytg==","i":60000,"c":"nLAYwrVpldK36SXo14ZZcxzzcAeoB8vMW0XIchzdQxHAdufUSlDlVAenMnreXQTYPnqYuCGRIIYTWrnND+w57ODtX3BUCb7IzET1/mHDdwl/NtCdedBGxZZMehjk4wKwAH4VymMgx3vTi+HatjNGVGsbwr8jH3Zeg/RslMHM5iI/jrg9tHIBWrAPcgohnOfPPSHASRnebTFc/kXv6Jrpm0g5AuE/bGfXbjWEyUxpWs/XDPnDr+hLiG3TCJ2Nj9TmYgBMsWZq5DSddai9pTmEF6g/KxftSrcTjk8q9XD+mV+e5SHlLbBdqwZqm+rQUEki7QBqKX5apshKaEYD0m5YzwDmRHYb0tvkttxpFE8c8vnIFPBOwEscQYZC8FMywVnZsvrkWpyP3IU7Ek1OxImr4g8XyvkWnaTv31zWAnt7QgClnY+/44xFh0TmY3o8iI+R1tDcoMArD/aTIvdFU6WX/TMWUBsoeAB1ycU0RjLUEOrjUi8gk1f9ok/wQu3f4bJVETooEdUp4ifRsZpZ/9Y2UCth1K9+Luh0bgA39eYVMvEwlT2QWFk5UV7BAspAaLLS4NZbETxHbibIgra1+JiASpsgMWvS1SUdzpbPajHRflJkXOLSMPQJCuaGYg7E58q0gx5QpiTRproGQpl7e/wh2faur2I0NUl6TcTYMnaQA0Hnb60y/7HLusnQb4ilUJzN+yJPFQy7GCphAf55+ny1QyyBAUQMdV47jctgTsF7yG9nahzfissUzTU4SiC5fxv33rtJuqg1C/CqC9swNOQLC+hUDalKViixiOmBYIspnmLcvl+ySOvKU4W+lXDqUYhN3Bx2fspjdqh8FPdmPzAUnh5g/2IssZzj7QWXkskB8p2zJEJPaMhUdOiW+p7micNLfkrD93Z5pkxShc0V5XMvlrdo4T9688dRbZhs7j8awdB5NlC8n6UOmcyjKmcYUBA8XifC8Xwm8eWp84j/rs24C2H/znejLveFJaVYL7ZBnvfpr4Sy5XdE9c7KU7KAWI2nSxhqrxtjGmsTNye/JUIFogxEW7bgkyDMdA5wAhD5IHB30Rg6UmUZhJE5uHd79Ssq7A/vuCOdRsKHWMDP5WsiP4qg9rdxnGPLGQdT6BgvLa/IdpXQ8auRz+XMJhGuTYM+hDMIytvjZHlHp0HlUiqUEFCQDD0a02A7mROHGAilCbk2Zxadz3RnUPLJPgMP3GjwsPAH0Pw/5Qdnt3hMznC69VsG64Sdejda0MZBmdOkU4z7molVMkri9iKwF0hGkoAWLEf2nKl46lT7Z3CL5JOxWIGo9u84HjkFRmCiI8d2FGJNr/hk4pB2FaCiHT2kUb7boVlqDfs3l/Nv64V06Xnz3oV4hpeNoyCV30eDwURff9Rwgjd6DtSn3brU7cy9XalpjYwHJrDThcTo/kXceXmGWF3bCINe+oMscT4+xPH86HzqXBnB1BLwNcSKKZ7T65t4LvUDoJC14omk7LfCubTthoOuLY0x2zjFS7MnsnjowBjjhWkUgd0C7JdEwuke2TQX/IwkXBJq5qyZUZVP0R3wWJ5ddlFqGO0el7PGvW6W2sewGOnsgWImdAktcoP+/0rfTuoPKHwRdMcTfOJihEWl4UqJsgn8rLoKV6d3GIRZfg8atuQtyZcfERpPvrAfw2bd15PoehecYXpwZzgWc100AELIkw4xmgNwydPsgU8uwtPeI11P5CbzcLJIeFcYP9wBo31OIkRvrIfuVq1YgcQ9zRL/BL84dUh9kwdyvNABoAlJGi4NMPTBFZbzBhxm/9lB6MwDu6hyuqtRfsSBj/XE5R3VB9ftO6SxVEVyef5D9Z8ZDdaOSYYhrpPLkdpO1lam/RSN1Geqp0dEKh2hh615+mYR91cX1Skc+8ZleJhZXjxXNcodX3dqQPHkGq0z2jRyL8bozknRaPmUMtHAgYbX4zp25WdHo1SdVMgktFvSOE6XUnJDC8x9DyShGA02pn25m9gahuIPvefR19vLWv0tg+1y4vybjU3PYgS42rp1SItGekdXaOkW0j0MSJXp4E6kWrTGLaIYV7MQJqsqNf/2ZnVMaR57tBeMFotVhpSEY7Ha27TODhc/6bO862z8TXyIT4ca9OC1OA8bmuYGuPFyf4UhAKgVd0P3+dHL3dhJuXiXwh+vIYajbbMJNN5VC/etph1uvthCQ2A+0WTw+z2EeJFsBNPrzFqcREgHmSdehD74HD0Jon8M6xvAOYlzJcc1WBhzgKvDUX+fO5xuY6GqMkYJ2KEk6DWFZmjCocc5A6+oiEXF+8KbkGWP7D45tcOoPmDdrH6/ZLQpQ214c3dOGRFMno9yUFerwfhzGmrFVAW3NkU6wcD88lnll2G/DValWg1GAC+haBvADx6GV0AriQs02oMZAOivw8X3RVzFBxwkKW9gtnLNeksPASSbGjKs5ToPw3DcGq80sqKzSydspd39eDnFf+VhN0VLJDWVbqr3IImjT1rMBBu/3g8GjiGylZHaeiMQaVCnG+X+gLUtM3G0yaA59Lt1z2e19EUxljbVbF0/ccBpCa4XGxrXz6XO50e9/hah445vc0Q4PaPc8oYWBs2HnUNgO6x5JTGiz2KpcVpDNBc1ZFm/83Dm7SAqmk1pNt+a+kSTi42CiDURbnOKCx8arZUMrgXbtiXPm6e9OLzRx7PWtn4pEDzMXf6sDgoOZu51PIdM/kRDZ4jcuudPv+Es9LMQMzuKqkHLq2UUplO9YRNugR+rMVpcgc4/trAl1SEUIYEToWOiWgpqFSDzDNoWiDr3fHWAS5H2yMVt2X80kc5rlbgjACq7g9I2sAgtUcUaFUavrwbIT1qW2yTgUbdtbbeLMTDdM7RJe0vG0j41NeAIjLvBbFoi/xicvPIYGEZWh+aWA63miwnwlFf0oh6YxGBhh0CIINIm0T+CIHFVm0nuS3J2Xckw61tfqTmQX3A4OOlNVytEyeRziebsjQ0AGawCdsxUJaxtykyu4eyvEsRPPM9ddlT0eY7O5aBMpV2ToN5w/AkU2Tyz0POFcAhu8b0nsStKjBsGXR+3Au6VZnHBE2JCuN9bH0QXkCyzB2KHf7I4MixQNJJaYwJGeW60vKT4IuA8F6l8ed2lAmhdwlLlGYhCEHCkog95ERvHZdxJsuL+ccDcfomLCOLzaRTYm3fN95kdQDCsvaSgTl1fOujQw5Y/4XinjfHGEMlyQT87839Sd9mY/gDuDznhPeTEVaVo3UWG6GNCjF7W/yfMhf6CIq8YeDnVUEF2ln+0RSIcYFXol/HNcBsnaCsGvkj9WOXkxVqz0iEM5D8BnSigaWoxbFy5LLF6yGVqEII/p2oHxzi+Xhzo3G6VQ4NRIx5abCg3PamPmHiHG/vSlGxxYCZo5NPJW6BA9Vyx8vomeSS7GMa2mFwuWHJKGqUUBRo0YoMQllOzXC27e28cw/OD8pYSYKOl5dWl5YfPoIosIEd7hoWdGa2Nulr9ib3HXdgBLAl6fQWng4kz7dp3tWiX42Nu2AmHmqFXjqUtxWqj8ukPvnBZU5mlXuV6Fdedpaa000Y0MFuEVD1zskUsWt1nFRDibphHHC1ac3rB/W0qquRTnRNRF4GES3az1V7+HNCTUxKplmlEQUpIEmaejpKQ1F7NlIQHsZa5LZ25IaX1eTlmlHbVynPyEbit5R5DcoO0PNyvrDsf0YY5/2i1kde/tikdCXD5o1WmgonW3Rus6xQCDkKsZuWVF08mDZ62KwUzu27ddkNPiq37urjv8jmEHM+Oth1319rhlx2/eyM1k16075YpMZ11Cbp44VOfGPVMxBWXXwCH7NNMgI5RO8ZibRDa81PyVa7Z17mFp45ZVZA22QbgW143XzioGXprFgoMoLsvAZz0e1l+lSpWBMCk0O+Yxe15pVWXkDuPtvynJS+kpoUFu9Z0PWJTZY7VP69LexjUgzYFUElS77B4GBtJQ6vAn9EVNmcePay9D69TTQojuhLextTeDnypUttbLhPL9FEEn42Oup6ab1Tx7YW5qdhtfzOGEefC3kBvwoNhh4Y6WdwMwymwDat8BSa+lEIexF/lJdYk7HgqdqkazeKeKIrdsUCpXBZOa1NtD126FYLstibCNCdlY4HgWSs5LapymcnPwokZXHByccsQAP8c5WwMkXro6I6ZX4xIhaWnlrqkShk2RLwOB0gbcHs8VLKLICRPgFgpIowZGOXf1HAwNZBI6VrLH8hhlCTSt7mV+MdVSktum76oGrvpvpfsjOpW3WUAL15LyNkbivVpXnSa1B6orfKfhtWro766JdB3CxWY8VdDdgkCrXqsoh3GLRWPnQTs14yffkLSIUYrSjCb55IGLZQfa6Yl1SXkJBtLd4XCC0igIy/UAVKc6pTpfW3QLGWoE2tVwrFJaxtVbHOrv089Ujslejl1GWhNpvla5KhNhaeh7S483OPfbfIMnl7M8wbYXlz67Un2MBKaquf6dgH7aGsDvRjOzc0vYv00ivJmoHKYK7uETFZOWXy2ZNCHa5mGJgMOzX8OWkAclorl/45ivUf4O/iAvtkzSb2qKkJoj2o1wd0nIhcnFMxx0WCJ2XL4m0StzAcO1wlT3lqiMy9drgLN9racrmiDH06nzJcD/iumld8iHBQ8bMHENOhkf0Jt4/5JeWuMqCX62kpHwx8cryKIA1mi7X43PlJ4ph8TgW99gmZpGVeRyQszhbLDaWylwKvesXHCyi++9d+m/z4qOq0u3YyH265oQCpesHzvpkZehbwo+fOaeTPmUuJrZqbEm604A1dWtokFHoQl85S7+Z70fD1zcVbhWOUN/hzVgwq8Pm3i6wz4KLIlSO7Xz30lY9YE6/CVLfelxTQxwQyho3kXDFkPjyhrpZDUTEopoAt432zy52qSkBD1PgkHiuQEtYev+vraS2/baPLpkNf6rK9+NkCX27efirlToObOGC2EgLFy+BnbPGQFUBC6zaXZ7bpKR1ZigDI197aTw6vRUVy4sZFVwgpdiFUyk3xJuWY2O87fr46PpZ0WHzIMHzxrZgWV3U3wUNMEkIc6go5x/W4PScup7MiNEpibQlK/OVu4MNKv2Y6HMgULhxNdkrUiDRjCdSobxEj4Q6hd0MBBxfePIMeaSHKwotVPaThMEBDHBbueCqDRKarChCmLq/iSrcL7uidJ96m7UpRsJQL6WoPDAwT5xGPDUmIrHt+Mn8W2r/PK9TXQ3q+vOqdxdiC/x1UiUd35ythiWKTnUz88Wb423UN7gr7hTDsar7gQe4wJ4JD0+J2vTExZjl6h/MJUCu4OyBDRU/wwSr+TiljsWOANI9D7SnCMxSJahOakMJGz2b3FTLZ9dVixvqyVgkbrKOXrc5WyUBaDRnIjMAdR4sj+3vUqjW8HFRm6HaLaKkv6PcUSNs/4/jO96KMNfKvRJRt5WUcgtPNckAjAJQF2JEwN2YA0ttN/tIYo5VoVW8NjREG+sbZh44jWcxRSTFU566xdXqrRIU1QGV1Cs8s/GSVfPzkwZylhAuzr5ITSHmcT7bebZNehC6ZkDpr7k4W/1iIOtPwlQ7HetjMe6QTQuGqqTYspB2qvwUuVXxQFNx+7cADtir1tmRnXXRJCcwErVViFLkxBbUk0PPiro9E6jMcdvcuxk5ebKArQ/XM15+JryWayLyFfEIG8DJb0Ym4tAxpC4ShM+UA+rAkz6LxTFj+0uge33b5jILS25QgVkNP70iwEY8Wrz/jatal/CXZocJ5gEn0R+kKxNmOVgU+ZMV6rcrUmBrq+Ol5ftkOeRzRJOT4GwLYbz3dezYCEId5ywBYT7juLD2uVAFRUw8xcFMOplbNvIpOULCKVXzFFYEQ2bOE6cvppDeFYanboQuIgStUYodO/DWR+Xa1dxgx7IBtmdnso/QntRzB0ARiCqoxhwyHFBIxG3SXeFAHZ409IoBLJauNRaXbaHkRQYfCXa782YQyTS+6EIbwg3ar+XhAKq/YuCVt+VJoy+MiIEnfJn+zaAfglalH5pinobycemFzp0COjVPuqOVItmkqOQrIn9lsQPjVvF4JncdZzGp+MX5Drpd0NlOL/6P+rgHnXMcH8uYFqIdosim52ju7Dukr3pUxm1146b4b2pvmCVAziRtcomQIczPFA9GPM3BV1ZwfeJvMZKlWLqL/j6g376t4TIhiu317AmKviTNlH4re0jSi3VXY+ytqMV94P6UT59U9fttIzboQG1d0GHFFEJNLtN0uJDC4qmZ/z5XFH1OfuaPcyMHByYJQW0HLQ5Yz+eFRUhFLp+80alDnwBj0t9NQ0AP3QURNqOhWW/hcFGHhVBKLxJdh8iJKyIb1GffC6IfvKYwFbIJ01bFymBiHLta91jmu4ZwW02dXNzRC6b8S91lFnzJ3dqZWkjerpOaGZCD9hs5ZXspy61v/gTiMq2JPvMlu6p0aGvwcpxFSOUJXjIKWu/F9BbmZJt0H6aHlx5GRr98QAlBlk9esz6dV1Qb7lzbY4p8OXjbwXNl8mLx3IlMLwkRWHjhNUIqtfpfk/ni6cCEW1PlCK5pwBJUH7s3hXvNapmqPDvHWVXwA1ov29nLG/pg7nTQI4KtKNqIs0mEdEXSMXAHqX1iG+goBEj65IuJ3OasvoGC1BUyCdWXk9ayu3gek/uANnKBiBB2auBTY6sZwp5Mzlq0et2uZPRpPFeSznEICUc3CSafVlxk4RdVdSzckwZbDCsiuBPEeP9KrWEBkHsiquvCFn4cCynl698P9haxwg4CcniVWxRVhEkn02B8enugLkY1Vu7B4NwwYWdSIHmfYiGcKgdtcBd7xaXUYV2DFl345VHkGrBipL+DCjzBoGi5L3y+kHsEU9tDQ3Yxv6skiprMfFfXoTIoE7j85Nj7DGkxf4T7/qtMr8QeUTwVsdGAniJEj+4HWOD9VcK2VT85XFtZ1BMWKFX78yAZVAMTb49RE37yxGmrlu8cJ62ClyI0pw0dr5PrQcz68iFC2erVZqne77FwKy4kmq0t5Dwo4dRfSR5jVID6CrQNzF6GZSn+DGkveUgc6oC4Ubui/thDbXP2LjuI85e1XQxgup3oTQroN4RlYTkM607XNEhs12sssudE7ZXYZoPVZQNaH8ctcrvs6DXPPCvRO+T4M5I6hemVLXGHfN/oio1lYQ6oEITjP5uKftndo1luX+yktDbkPOlm+i8YynyRytDTdVm+sBs7jitnipPyVsWKvl/zhSancsn0ou/vsYxNunMGrq74uglzMfKsoRAr8L958zqq98sMGgU3giQS2IyS+gKH9six0WzcmQV36ywJ1unwGgdW88pwwxc6rEX9pcgnrUPT39HmB04Kg9Za7FFMNGfFlqT4q63Wd5vcRvqYmnf0FseSaaUsVT9bVHlT5C3WfSzRUbpeOvfL3NnNmqx8DJZ9pNQSbKab+8qSamXpuFbrK82X1DPN0JSOYgHigBlyfNjuDFG8jDK2DFTJBnp0w1ZU5mwotYlpQr1pDlOdtoxYjmLzVaP0M9S0hUoTuEl78f2wXBUEmLUsYAG/s+2476MSAU9UTCjd97CuvoROce5SDH3kDcCDEdiXrO0Uc/gH6cjEt8RgpTcFrbNRmIHFK9eDE9skbtXjR62MnYXcuPd/CSPwmxaR+5eQpdO+6IP0tbfubzEQkEXaFbEB5hr2o8mHhDbvOh90wgq1H7ryzn6ncdODrveqzuDovycptZOaRlFU/+rcKK8AKDjQxct0lx1J5wFyV2EDolLoJWkLbCnbYwF4LRPpERvEEd7UhvUKAZfFuMmo+cdnNUBT4rXZqCF0e+9lcsGmOmuLJXlMS9vkc4AQBCKkVzd2gmKT095T+R+JxI7VIuAzm118HcgMJWJtMkMakaN92pQxLHsicU3UFIEwPRZOkMGsDZRE+XTZCpKCVvK422+ASFlAlmz1LCLO//BTiw4bvjbTySF1rXad7f5t9yKLTTm8pwH8GRHKsnfiBjANMU7fOIF+dv+eWaBddTtux6HFmS0LT7NuK02BfUq31UQUNYWEPu4oJkrDstqD0zIDRc8ozfYeIXsIzKDmz1pO0QAkq6cUaDtQEplvmwpjtwYAt31gvEnwCSFtUw4dTZuw1pcqpkU23WDpv8+plNB9+yOoKWnGVIPxXcOgFAT0cjgIEvnV8lqzZTKuzIOB3Jb2e9aNieM+9M2Hsv1PVY87iga00NAPiiEiDPWqXoGlRc2JHlrDTJsi93hzuWIrAlqWki0XEgsNmlWqoyinlwzok1TVVVDokLJ/2lPigMlI+7lgpE+xOKIapMx7v4+ZzQfq9Rwy7auSbbkHqw+6PDGV+UeN7pmxyU2i7uEp5ezExrOMKvKvSM2HDPb7HSYH5kU9yrXn+5lIyU79LYGQJSrzTsFaQF9kXR3S5B5qBv57L8/tYjuECXZDUMB+MZDLBEyAohiyTb9x7qg8oeuF89cb0s9/211R0dT5SS4/hql+Xt0KyXNXkdVcZa9jt0XGwJiZZffz+FuBXhRB4jt6h4+xgCzE9s5fsE+rBtIoM75xVcAvB7kbld7EVDd47N3OQO97KYvQe4FapWsBn+HnC3JF28FY9+tJp9MLfQb+Yd4MP3egE4XdKufSA++S/ViDx0cSxLuUnZDrEgefBYHMztFb2NUDogxL+O+x9/km9JhX2iLp/IzKuZ4dTPJ9z1EahJxTX55LaUhdV/LHkX5PU3kqjS3/6mq9tbfuT423RAvHCpDAGEoGLskVryNKVuwcNtfM99zRN2pRVMOtF1TsHmktojwWJ8iOP8159XLCXJWV6yLDLvHzQ7VDKZQq3EX7WfBcClnql89SsrGhevIceN4+ZG9VQGiywrQvz5qwKzP5jncy0tcpfzQRay1Et45w5tBCfCUACj88CgBAd1Y0FfCzNqWqNJ07UXvhB4XkbOT0ZsGwlcVfXt097ey+ZvIcqE8tVUNmMrhVKoM6sX2xrjtUIqIpvcqLeUHXB2QTYF6SL0EXSKHI6gFhiNNZK0BTk8ZbYj2Q7Ktfi7LY/E/7NFNa3gdUKLUFgMJW/wHZTb0IChWDwex5WDYpFCbRAJXSPowzz5ik3dkGN5Ovse/atVGoIWByNG4GirdNNI9dmE2Q==","m":"nYEL8aiyVicNXAehvW39iXW/Osz92vvxVGSXTD4VLwo="},"kunci":{"s":"xDgz7SqKa1cGN17TW2M7Jw==","n":"FKlOSyhplG46utYpsuPTUQ==","i":60000,"c":"sM0UZv4cbiVNDb8GkjtNavfP/2xA6990d6Qxx9vdIW4xo86vmB8lP3hwQIvNiJWLS0Ka+Q==","m":"c81qs5R6yUnEsSDcnhdyucxZ8k9kRC+7HewtlpnhQB0="},"reset":{"s":"Fb3yc36x9MobShLHHQdwkw==","i":60000,"h":"96ca4d9428d0c54e7fee45d3333e15af367768886a4e826fc1db764ff55619e6"},"logo":"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","logoW":159,"logoH":160,"lebar":{"Helvetica":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584,761,556,0,222,556,333,1000,556,556,333,1000,667,333,1000,0,611,0,0,222,222,333,333,350,556,1000,333,1000,500,333,944,0,500,667,278,333,556,556,556,556,260,556,333,737,370,556,584,333,737,333,400,584,333,333,333,556,537,278,333,333,365,556,834,834,834,611,667,667,667,667,667,667,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,500,556,556,556,556,278,278,278,278,556,556,556,556,556,556,556,584,611,556,556,556,556,500,556,500],"Helvetica-Bold":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584,761,556,0,278,556,500,1000,556,556,333,1000,667,333,1000,0,611,0,0,278,278,500,500,350,556,1000,333,1000,556,333,944,0,500,667,278,333,556,556,556,556,280,556,333,737,370,556,584,333,737,333,400,584,333,333,333,611,556,278,333,333,365,556,834,834,834,611,722,722,722,722,722,722,1000,722,667,667,667,667,278,278,278,278,722,722,778,778,778,778,778,584,778,722,722,722,722,667,667,611,556,556,556,556,556,556,889,556,556,556,556,556,278,278,278,278,611,611,611,611,611,611,611,584,611,611,611,611,611,556,611,556]}};
+(function () {
+  var META = DATA.meta, NB = META.butir.length, NS = NB * 4, DUR = META.durasi_menit * 60000;
+  var KEY = "mk5kbb_kuis_" + META.kuis, KEY_RESET = KEY + "_reset";
+  var ASET = { logo: MK5.b64d(DATA.logo), logoW: DATA.logoW, logoH: DATA.logoH, lebar: DATA.lebar };
+  var app = document.getElementById("app"), foot = document.getElementById("foot");
+  document.getElementById("logo").src = "data:image/jpeg;base64," + DATA.logo;
+  document.getElementById("subjudul").textContent = META.nama + " · MK 5 Kedokteran Berbasis Bukti pada KKLP · Sesi " + META.sesi + ", " + META.tanggal;
+  var S = null, SOAL = null, mode = "mandiri", API = null, timerId = null, mengumpulkan = false, simpanId = null, catatanMode = "";
+
+  // ---------- utilitas DOM ----------
+  function el(tag, at, kids) {
+    var e = document.createElement(tag);
+    if (at) Object.keys(at).forEach(function (k) { if (k === "text") e.textContent = at[k]; else if (k === "cls") e.className = at[k]; else if (k.slice(0, 2) === "on") e.addEventListener(k.slice(2), at[k]); else e.setAttribute(k, at[k]); });
+    (kids || []).forEach(function (c) { if (c) e.appendChild(typeof c === "string" ? document.createTextNode(c) : c); });
+    return e;
+  }
+  function tampil(nodes) { app.innerHTML = ""; var m = el("main"); nodes.forEach(function (n) { if (n) m.appendChild(n); }); app.appendChild(m); window.scrollTo(0, 0); }
+  function acakID() { var b = new Uint8Array(4); (window.crypto || window.msCrypto).getRandomValues(b); return MK5.hex(b).toUpperCase(); }
+  function modal(isi) { var m = el("div", { cls: "modal", role: "dialog", "aria-modal": "true" }, [el("div", { cls: "card" }, isi)]); document.body.appendChild(m); return m; }
+
+  // ---------- penyimpanan ----------
+  function lsOK() { try { var k = KEY + "_cek"; localStorage.setItem(k, "1"); var ok = localStorage.getItem(k) === "1"; localStorage.removeItem(k); return ok; } catch (e) { return false; } }
+  function idb(fn) {
+    return new Promise(function (res) {
+      try {
+        var rq = indexedDB.open("mk5kbb_kuis", 1);
+        rq.onupgradeneeded = function () { rq.result.createObjectStore("status"); };
+        rq.onsuccess = function () { try { fn(rq.result, res); } catch (e) { res(null); } };
+        rq.onerror = function () { res(null); };
+      } catch (e) { res(null); }
+    });
+  }
+  function idbBaca() { return idb(function (db, res) { var t = db.transaction("status", "readonly").objectStore("status").get(META.kuis); t.onsuccess = function () { res(t.result || null); }; t.onerror = function () { res(null); }; }); }
+  function idbTulis(v) { return idb(function (db, res) { var tx = db.transaction("status", "readwrite"); if (v === null) tx.objectStore("status").delete(META.kuis); else tx.objectStore("status").put(v, META.kuis); tx.oncomplete = function () { res(true); }; tx.onerror = function () { res(false); }; }); }
+  function urai(teks) { try { var o = JSON.parse(teks); return o && o.kuis === META.kuis ? o : null; } catch (e) { return null; } }
+  function lebihMaju(a, b) { if (!a) return b; if (!b) return a; if (a.status === "selesai" && b.status !== "selesai") return a; if (b.status === "selesai" && a.status !== "selesai") return b; return a; }
+  function scormSD() { var sd = API.LMSGetValue("cmi.suspend_data"); if (!sd) return null; try { return urai(new TextDecoder().decode(MK5.b64d(sd))); } catch (e) { return null; } }
+  function bacaStatus() {
+    if (mode === "scorm") return Promise.resolve(scormSD());
+    var a = null; try { a = urai(localStorage.getItem(KEY)); } catch (e) {}
+    return idbBaca().then(function (b) { b = b ? urai(b) : null; return lebihMaju(a, b); });
+  }
+  function simpan(segera) {
+    if (!S) return;
+    var teks = JSON.stringify(S);
+    if (mode === "scorm") {
+      clearTimeout(simpanId);
+      var tulis = function () { API.LMSSetValue("cmi.suspend_data", MK5.b64e(MK5.utf8(teks))); API.LMSCommit(""); };
+      if (segera) tulis(); else simpanId = setTimeout(tulis, 800);
+      return;
+    }
+    try { localStorage.setItem(KEY, teks); } catch (e) {}
+    idbTulis(teks);
+  }
+  function jumlahReset() { try { return +(localStorage.getItem(KEY_RESET) || 0); } catch (e) { return 0; } }
+
+  // ---------- SCORM 1.2 ----------
+  function cariAPI() {
+    var w = window, n = 0;
+    try { while (w && !w.API && w.parent && w.parent !== w && n < 20) { w = w.parent; n++; } if (w && w.API) return w.API; } catch (e) {}
+    try { if (window.opener) { w = window.opener; n = 0; while (w && !w.API && w.parent && w.parent !== w && n < 20) { w = w.parent; n++; } if (w && w.API) return w.API; } } catch (e) {}
+    return null;
+  }
+  var selesaiLMS = false;
+  function tutupLMS() { if (mode === "scorm" && !selesaiLMS) { selesaiLMS = true; try { API.LMSCommit(""); API.LMSFinish(""); } catch (e) {} } }
+  function laporLMS(r) {
+    var set = function (k, v) { try { return API.LMSSetValue(k, String(v)) === "true"; } catch (e) { return false; } };
+    set("cmi.core.score.min", 0); set("cmi.core.score.max", 100); set("cmi.core.score.raw", r.total);
+    for (var i = 0; i < NB; i++) {
+      var p = "cmi.interactions." + i + ".";
+      set(p + "id", META.kuis + "_butir" + (i < 9 ? "0" : "") + (i + 1)); set(p + "type", "performance");
+      set(p + "student_response", r.jawaban.substr(i * 4, 4)); set(p + "result", r.skor[i]); set(p + "weighting", 1);
+    }
+    set("cmi.core.lesson_status", "completed"); set("cmi.core.exit", "");
+  }
+
+  // ---------- layar 1: identitas ----------
+  function layarIdentitas(prefNama) {
+    var nama = el("input", { type: "text", id: "nama", autocomplete: "name", maxlength: "120" }), npm = el("input", { type: "text", id: "npm", inputmode: "text", autocomplete: "off", maxlength: "30" });
+    var kode = el("input", { type: "text", id: "kode", autocomplete: "off", autocapitalize: "characters", spellcheck: "false", maxlength: "30" });
+    var setuju = el("input", { type: "checkbox", id: "setuju" }), err = el("div", { cls: "err", id: "err", role: "alert" });
+    if (prefNama) nama.value = prefNama;
+    var btn = el("button", { cls: "pri", id: "mulai", type: "submit", text: "Mulai kuis" });
+    var form = el("form", { novalidate: "novalidate" }, [
+      el("label", { cls: "f", for: "nama", text: "Nama lengkap (sesuai data akademik)" }), nama,
+      el("label", { cls: "f", for: "npm", text: "NPM" }), npm,
+      el("label", { cls: "f", for: "kode", text: "Kode akses (diumumkan dosen saat kuis dimulai)" }), kode,
+      el("div", { cls: "chk" }, [setuju, el("label", { for: "setuju", text: "Saya mengerjakan kuis ini sendiri tanpa bantuan orang lain, dan saya memahami bahwa kuis ini hanya dapat dikerjakan satu kali." })]),
+      err, el("div", { cls: "row" }, [btn]),
+    ]);
+    form.addEventListener("submit", function (ev) {
+      ev.preventDefault(); err.textContent = "";
+      var v = validasi(nama.value, npm.value, kode.value, setuju.checked);
+      if (v.galat) { err.textContent = v.galat; (v.fokus ? document.getElementById(v.fokus) : nama).focus(); return; }
+      konfirmasiMulai(v, btn, err);
+    });
+    tampil([
+      el("div", { cls: "card" }, [el("h1", { text: META.nama + " MK 5 Kedokteran Berbasis Bukti pada KKLP" }),
+        el("div", { cls: "muted", text: "Sesi " + META.sesi + ", " + META.tanggal + " · " + NB + " butir Multiple True-False · " + META.durasi_menit + " menit" }),
+        el("ul", { cls: "rules" }, [
+          el("li", { text: "Setiap butir berisi empat pernyataan; jawab Benar atau Salah untuk setiap pernyataan." }),
+          el("li", { text: "Skor butir = 25 × jumlah pernyataan yang dijawab benar (0–100). Pernyataan yang tidak dijawab bernilai 0, tanpa pengurangan nilai." }),
+          el("li", { text: "Nilai kuis = rerata skor " + NB + " butir. Nilai per butir dan nilai total tampil segera setelah jawaban dikumpulkan." }),
+          el("li", { text: "Waktu " + META.durasi_menit + " menit dihitung sejak tombol Mulai ditekan dan tetap berjalan walaupun halaman ditutup. Jawaban tersimpan otomatis dan dikumpulkan otomatis saat waktu habis." }),
+          el("li", { text: "Kuis hanya dapat dikerjakan satu kali. Setelah selesai, unduh PDF hasil dan unggah ke Moodle." }),
+        ]),
+        catatanMode ? el("div", { cls: "box warn", text: catatanMode }) : null]),
+      el("div", { cls: "card" }, [el("h2", { text: "Identitas dan kode akses" }), form]),
+    ]);
+    pasangFooter();
+    nama.focus();
+  }
+  function validasi(nm, np, kd, ok) {
+    var nama = String(nm).normalize("NFC").replace(/\s+/g, " ").trim(), npm = String(np).replace(/\s+/g, "").toUpperCase();
+    if (!nama) return { galat: "Nama lengkap wajib diisi.", fokus: "nama" };
+    if (nama.length < 3 || nama.length > 100) return { galat: "Nama lengkap harus 3–100 karakter.", fokus: "nama" };
+    if (!/^[\p{L}\p{M}][\p{L}\p{M} .,'’()\-]*$/u.test(nama) || (nama.match(/\p{L}/gu) || []).length < 2) return { galat: "Nama hanya boleh berisi huruf, spasi, titik, koma, tanda kurung, apostrof, dan tanda hubung, dan diawali huruf.", fokus: "nama" };
+    if (!npm) return { galat: "NPM wajib diisi.", fokus: "npm" };
+    if (!/^[0-9A-Z]{5,20}$/.test(npm) || (npm.match(/[0-9]/g) || []).length < 4) return { galat: "NPM harus 5–20 karakter berupa angka (boleh huruf), tanpa spasi atau tanda baca.", fokus: "npm" };
+    if (!MK5.normKode(kd)) return { galat: "Kode akses wajib diisi.", fokus: "kode" };
+    if (!ok) return { galat: "Centang pernyataan kejujuran terlebih dahulu.", fokus: "setuju" };
+    return { nama: nama, npm: npm, kode: MK5.normKode(kd) };
+  }
+  function konfirmasiMulai(v, btn, err) {
+    var m = modal([el("h2", { text: "Pastikan identitas sudah benar" }),
+      el("div", { cls: "kv" }, [el("div", { text: "Nama" }), el("div", { text: v.nama }), el("div", { text: "NPM" }), el("div", { text: v.npm })]),
+      el("div", { cls: "box", text: "Nama dan NPM tidak dapat diubah setelah kuis dimulai. Waktu " + META.durasi_menit + " menit mulai berjalan setelah Anda menekan Ya, mulai." }),
+      el("div", { cls: "row" }, [el("button", { cls: "pri", id: "ya-mulai", text: "Ya, mulai", onclick: function () { m.remove(); mulai(v, btn, err); } }), el("button", { cls: "sec", text: "Perbaiki", onclick: function () { m.remove(); } })])]);
+    document.getElementById("ya-mulai").focus();
+  }
+  function mulai(v, btn, err) {
+    btn.disabled = true; btn.textContent = "Memeriksa kode akses…";
+    setTimeout(function () {
+      var soal = MK5.bukaBlob(v.kode, DATA.soal);
+      if (!soal) { btn.disabled = false; btn.textContent = "Mulai kuis"; err.textContent = "Kode akses salah. Periksa kembali kode yang diumumkan dosen."; document.getElementById("kode").focus(); return; }
+      bacaStatus().then(function (ada) {
+        if (ada) { S = ada; return lanjut(); } // tab atau sesi lain sudah memulai: patuhi status yang ada
+        var t = Date.now();
+        S = { v: 1, kuis: META.kuis, build: META.build, status: "berlangsung", nama: v.nama, npm: v.npm, kode: v.kode, mulai: t, batas: t + DUR, jawaban: new Array(NS + 1).join("-"), keluar: 0, jam_anomali: 0, terakhir: t, percobaan_id: acakID(), reset: mode === "scorm" ? 0 : jumlahReset() };
+        if (mode === "scorm") { API.LMSSetValue("cmi.core.lesson_status", "incomplete"); API.LMSSetValue("cmi.core.exit", "suspend"); }
+        simpan(true); SOAL = soal; layarSoal();
+      });
+    }, 30);
+  }
+
+  // ---------- layar 2: soal ----------
+  function terjawab() { return S.jawaban.replace(/-/g, "").length; }
+  function layarSoal() {
+    var waktu = el("span", { cls: "timer", id: "timer", "aria-live": "off" }), hit = el("div", { cls: "muted", id: "hit" });
+    var bar = el("div", { cls: "bar" }, [el("div", { cls: "who", text: S.nama + " · NPM " + S.npm }), el("div", { cls: "sisa" }, [el("span", { cls: "muted", text: "Sisa waktu " }), waktu]), hit, el("button", { cls: "pri", id: "kumpul-atas", text: "Kumpulkan", onclick: tanyaKumpul })]);
+    var peringatan = el("div", { cls: "alert", id: "peringatan", "aria-live": "assertive" });
+    var nav = el("nav", { cls: "nav", "aria-label": "Navigasi butir" });
+    var kartu = [];
+    SOAL.forEach(function (b, i) {
+      nav.appendChild(el("a", { href: "#butir" + (i + 1), id: "nav" + (i + 1), text: String(i + 1), "aria-label": "Butir " + (i + 1) }));
+      var isi = [el("h2", { text: "Butir " + (i + 1) }), el("div", { cls: "muted", text: "Blok " + b.blok }), el("div", { cls: "stem", text: b.stem })];
+      b.pernyataan.forEach(function (p, j) {
+        var idx = i * 4 + j, grp = "p" + idx, opts = el("div", { cls: "opts", role: "radiogroup", "aria-label": "Pernyataan " + p.h + " butir " + (i + 1) });
+        [["B", "Benar"], ["S", "Salah"]].forEach(function (o) {
+          var inp = el("input", { type: "radio", name: grp, value: o[0], id: grp + o[0] });
+          if (S.jawaban.charAt(idx) === o[0]) inp.checked = true;
+          inp.addEventListener("change", function () { pilih(idx, o[0]); });
+          opts.appendChild(el("label", { for: grp + o[0], cls: inp.checked ? "on" : "" }, [inp, o[1]]));
+        });
+        isi.push(el("div", { cls: "st" }, [el("div", { cls: "tx" }, [el("b", { text: p.h + ". " }), p.teks]), opts]));
+      });
+      kartu.push(el("section", { cls: "card", id: "butir" + (i + 1) }, isi));
+    });
+    var bawah = el("div", { cls: "card" }, [el("div", { cls: "muted", id: "hit2" }), el("div", { cls: "row" }, [el("button", { cls: "pri", id: "kumpul", text: "Kumpulkan jawaban", onclick: tanyaKumpul })])]);
+    app.innerHTML = ""; app.appendChild(bar);
+    var m = el("main"); [peringatan, nav].concat(kartu).concat([bawah]).forEach(function (n) { m.appendChild(n); }); app.appendChild(m);
+    perbaruiHitung(); detak(); clearInterval(timerId); timerId = setInterval(detak, 1000);
+    pasangFooter();
+  }
+  function pilih(idx, v) {
+    S.jawaban = S.jawaban.substring(0, idx) + v + S.jawaban.substring(idx + 1);
+    ["B", "S"].forEach(function (o) { var inp = document.getElementById("p" + idx + o); if (inp) { inp.checked = o === v; inp.parentNode.className = o === v ? "on" : ""; } });
+    perbaruiHitung(); simpan(false);
+  }
+  function perbaruiHitung() {
+    var n = terjawab(), t = "Terjawab " + n + " dari " + NS + " pernyataan";
+    var a = document.getElementById("hit"), b = document.getElementById("hit2"); if (a) a.textContent = n + "/" + NS; if (b) b.textContent = t;
+    for (var i = 0; i < NB; i++) { var k = S.jawaban.substr(i * 4, 4).replace(/-/g, "").length, e = document.getElementById("nav" + (i + 1)); if (e) e.className = k === 4 ? "full" : (k > 0 ? "part" : ""); }
+  }
+  function sinkronJawaban() { for (var idx = 0; idx < NS; idx++) ["B", "S"].forEach(function (o) { var inp = document.getElementById("p" + idx + o); if (inp) { inp.checked = S.jawaban.charAt(idx) === o; inp.parentNode.className = inp.checked ? "on" : ""; } }); perbaruiHitung(); }
+  var detakKe = 0;
+  function cekJam() { // jam perangkat dimundurkan lebih dari 2 detik: geser mulai dan batas agar waktu tidak bertambah
+    var now = Date.now();
+    if (S.terakhir && now < S.terakhir - 2000) { var j = S.terakhir - now; S.mulai -= j; S.batas -= j; S.jam_anomali = (S.jam_anomali || 0) + 1; S.terakhir = now; simpan(true); return; }
+    S.terakhir = Math.max(S.terakhir || 0, now);
+  }
+  function detak() {
+    cekJam(); if (++detakKe % 5 === 0) simpan(true);
+    var sisa = S.batas - Date.now(), e = document.getElementById("timer"), w = document.getElementById("peringatan");
+    if (sisa <= 0) { if (e) e.textContent = "00:00"; kumpulkan(true); return; }
+    var d = Math.ceil(sisa / 1000);
+    if (e) { e.textContent = (d >= 600 ? "" : "0") + Math.floor(d / 60) + ":" + (d % 60 < 10 ? "0" : "") + (d % 60); e.className = "timer" + (d <= 60 ? " lo" : ""); }
+    if (w) { var msg = d <= 60 ? "Waktu tersisa kurang dari 1 menit. Jawaban akan dikumpulkan otomatis." : (d <= 300 ? "Waktu tersisa kurang dari 5 menit." : ""); if (w.textContent !== msg) { w.innerHTML = ""; if (msg) w.appendChild(el("div", { cls: "box " + (d <= 60 ? "bad" : "warn"), text: msg })); } }
+  }
+  function tanyaKumpul() {
+    if (document.querySelector(".modal")) return;
+    var kosong = NS - terjawab();
+    var m = modal([el("h2", { text: "Kumpulkan jawaban?" }),
+      el("p", { text: "Anda menjawab " + terjawab() + " dari " + NS + " pernyataan." + (kosong ? " " + kosong + " pernyataan belum dijawab dan akan bernilai 0." : "") }),
+      el("div", { cls: "box", text: "Setelah dikumpulkan, jawaban tidak dapat diubah dan kuis tidak dapat dikerjakan ulang." }),
+      el("div", { cls: "row" }, [el("button", { cls: "pri", id: "ya-kumpul", text: "Ya, kumpulkan", onclick: function () { m.remove(); kumpulkan(false); } }), el("button", { cls: "sec", id: "batal-kumpul", text: "Kembali ke soal", onclick: function () { m.remove(); } })])]);
+    document.getElementById("batal-kumpul").focus();
+  }
+  function kumpulkan(otomatis) {
+    if (mengumpulkan || !S || S.status === "selesai") return;
+    mengumpulkan = true; clearInterval(timerId);
+    var mm = document.querySelector(".modal"); if (mm) mm.remove();
+    bacaStatus().then(function (ada) {
+      if (ada && ada.status === "selesai") { S = ada; mengumpulkan = false; return layarHasil(true); }
+      if (ada && ada.percobaan_id !== S.percobaan_id) { S = ada; mengumpulkan = false; return lanjut(); }
+      if (ada && ada.jawaban && mode !== "scorm") S.jawaban = gabung(S.jawaban, ada.jawaban);
+      var kunci = MK5.bukaBlob(S.kode, DATA.kunci);
+      if (!kunci) { mengumpulkan = false; tampil([el("div", { cls: "card box bad", text: "Kunci penilaian tidak dapat dibuka. Hubungi dosen; jawaban Anda tetap tersimpan di peramban ini." })]); return; }
+      cekJam(); var selesai = Math.min(Date.now(), S.batas), hasil = MK5.nilai(S.jawaban, kunci.kunci);
+      var r = { v: 1, app: "MK5KBB-KUIS", kuis: META.kuis, build: META.build, nama: S.nama, npm: S.npm, jawaban: S.jawaban, skor: hasil.skor, total: hasil.total,
+        mulai: S.mulai, selesai: selesai, durasi_detik: Math.floor(selesai / 1000) - Math.floor(S.mulai / 1000), otomatis: !!otomatis, keluar_halaman: S.keluar, jam_anomali: S.jam_anomali || 0, mode: mode, percobaan_id: S.percobaan_id, reset: S.reset };
+      S.status = "selesai"; S.rekaman = r; delete S.kode;
+      if (mode === "scorm") laporLMS(r);
+      simpan(true); mengumpulkan = false; layarHasil(false);
+    });
+  }
+  function gabung(a, b) { var o = ""; for (var i = 0; i < NS; i++) o += a.charAt(i) !== "-" ? a.charAt(i) : b.charAt(i); return o; }
+
+  // ---------- layar 3: hasil ----------
+  function layarHasil(dariSimpanan) {
+    clearInterval(timerId);
+    var r = S.rekaman, rows = [el("tr", {}, [el("th", { text: "Butir" }), el("th", { text: "Sub-CPMK" }), el("th", { text: "Pernyataan benar" }), el("th", { text: "Skor butir" })])];
+    for (var i = 0; i < NB; i++) rows.push(el("tr", {}, [el("td", { text: String(i + 1) }), el("td", { text: META.butir[i].sub }), el("td", { text: (r.skor[i] / 25) + " dari 4" }), el("td", { text: String(r.skor[i]) })]));
+    var kv = [["Nama", r.nama], ["NPM", r.npm], ["Mulai", MK5.wib(r.mulai)], ["Selesai", MK5.wib(r.selesai)], ["Lama pengerjaan", MK5.durasiTeks(r.durasi_detik)], ["Cara selesai", r.otomatis ? "Dikumpulkan otomatis karena waktu habis" : "Dikumpulkan oleh mahasiswa"], ["Kode verifikasi", MK5.kodeVerifikasi(r)]];
+    var unduh = el("button", { cls: "pri", id: "unduh", text: "Unduh PDF hasil", onclick: function () { unduhPDF(r); } });
+    tampil([
+      dariSimpanan ? el("div", { cls: "box warn", id: "info-kunci", text: META.nama + " sudah dikerjakan di " + (mode === "scorm" ? "akun Moodle ini" : "peramban ini") + ". Setiap mahasiswa hanya dapat mengerjakan satu kali; hasil di bawah ini tidak dapat diubah." }) : null,
+      el("div", { cls: "card" }, [el("h1", { text: "Hasil " + META.nama }),
+        el("div", { cls: "kv" }, kv.reduce(function (a, x) { return a.concat([el("div", { text: x[0] }), el("div", { text: x[1] })]); }, [])),
+        el("div", { cls: "total", id: "total", text: "Nilai " + META.nama + ": " + MK5.angkaID(r.total) }),
+        el("table", { cls: "res", id: "tabel-hasil" }, rows),
+        el("div", { cls: "row" }, [unduh]),
+        el("div", { cls: "box", text: "Unggah PDF hasil ke tugas Moodle yang ditentukan dosen tanpa mengubah isinya. Kunci jawaban dan pembahasan dibagikan dosen setelah kuis ditutup." + (mode === "scorm" ? " Nilai juga sudah tercatat di Moodle." : "") })]),
+    ]);
+    pasangFooter();
+  }
+  function namaBerkas(r) { var n = MK5.keASCII(r.nama).replace(/[^A-Za-z0-9]+/g, "_").replace(/^_|_$/g, "").slice(0, 40); return "Hasil_" + META.nama.replace(/\s+/g, "") + "_MK5_" + r.npm + (n ? "_" + n : "") + ".pdf"; }
+  function unduhPDF(r) {
+    var b = MK5.buatPDF(r, META, ASET), blob = new Blob([b], { type: "application/pdf" }), url = URL.createObjectURL(blob);
+    var a = el("a", { href: url, download: namaBerkas(r) }); document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 5000);
+  }
+
+  // ---------- reset oleh dosen ----------
+  function pasangFooter() {
+    foot.innerHTML = "";
+    if (mode === "scorm" || !S) return;
+    foot.appendChild(el("button", { cls: "lnk", id: "reset", text: "Reset oleh dosen", onclick: tanyaReset }));
+  }
+  function tanyaReset() {
+    var inp = el("input", { type: "text", id: "kode-reset", autocomplete: "off" }), err = el("div", { cls: "err", id: "err-reset" });
+    var m = modal([el("h2", { text: "Reset oleh dosen" }), el("p", { cls: "muted", text: "Hanya untuk dosen. Reset menghapus percobaan " + S.nama + " (" + S.npm + ") dari peramban ini dan dicatat pada PDF percobaan berikutnya." }),
+      el("label", { cls: "f", for: "kode-reset", text: "Kode reset dosen" }), inp, err,
+      el("div", { cls: "row" }, [el("button", { cls: "pri", id: "ya-reset", text: "Reset", onclick: function () {
+        if (!MK5.cocokVerifier(inp.value, DATA.reset)) { err.textContent = "Kode reset salah."; return; }
+        var n = jumlahReset() + 1;
+        try { localStorage.removeItem(KEY); localStorage.setItem(KEY_RESET, String(n)); } catch (e) {}
+        idbTulis(null).then(function () { S = null; SOAL = null; clearInterval(timerId); m.remove(); layarIdentitas(); foot.innerHTML = ""; });
+      } }), el("button", { cls: "sec", text: "Batal", onclick: function () { m.remove(); } })])]);
+    inp.focus();
+  }
+
+  // ---------- alur awal ----------
+  function lanjut() {
+    if (!S) return layarIdentitas(namaLMS());
+    if (S.status === "selesai") return layarHasil(true);
+    SOAL = MK5.bukaBlob(S.kode, DATA.soal);
+    if (!SOAL) { tampil([el("div", { cls: "card box bad", text: "Data percobaan di peramban ini rusak. Hubungi dosen." })]); pasangFooter(); return; }
+    cekJam();
+    if (Date.now() >= S.batas) return kumpulkan(true);
+    layarSoal();
+  }
+  function namaLMS() { if (mode !== "scorm") return ""; var n = ""; try { n = API.LMSGetValue("cmi.core.student_name") || ""; } catch (e) {} var p = n.split(","); return p.length === 2 ? (p[1].trim() + " " + p[0].trim()).trim() : n.trim(); }
+  function mulaiApp() {
+    API = cariAPI();
+    if (API) {
+      var ok = false; try { ok = String(API.LMSInitialize("")) === "true"; } catch (e) {}
+      if (ok) mode = "scorm"; else { API = null; catatanMode = "Aplikasi tidak tersambung ke Moodle (SCORM). Kuis berjalan sebagai berkas mandiri; satu kali pengerjaan dikunci pada peramban ini."; }
+    }
+    if (mode === "mandiri" && !lsOK()) {
+      tampil([el("div", { cls: "card box bad", id: "galat-simpan", text: "Peramban menolak penyimpanan lokal, sehingga batas satu kali pengerjaan tidak dapat dijaga. Buka berkas ini di jendela peramban biasa (bukan mode penyamaran) dengan Chrome, Edge, Firefox, atau Safari terbaru." })]);
+      return;
+    }
+    bacaStatus().then(function (st) {
+      if (mode === "scorm") {
+        var ls = ""; try { ls = API.LMSGetValue("cmi.core.lesson_status"); } catch (e) {}
+        if (!st && (ls === "completed" || ls === "passed" || ls === "failed")) { tampil([el("div", { cls: "card box warn", id: "info-kunci", text: META.nama + " sudah tercatat selesai di Moodle untuk akun ini. Kuis tidak dapat dikerjakan ulang." })]); return; }
+      } else if (st) { simpanUlangCermin(st); }
+      S = st; lanjut();
+    });
+    window.addEventListener("storage", function (e) {
+      if (e.key !== KEY || mode === "scorm" || mengumpulkan) return;
+      var baru = urai(e.newValue);
+      if (!baru) { if (S && S.status !== "selesai") return; return; }
+      if (S && baru.percobaan_id === S.percobaan_id && baru.status === "berlangsung" && S.status === "berlangsung") { S.jawaban = gabung(baru.jawaban, S.jawaban); S.keluar = Math.max(S.keluar, baru.keluar); if ((baru.jam_anomali || 0) > (S.jam_anomali || 0)) { S.jam_anomali = baru.jam_anomali; S.mulai = baru.mulai; S.batas = baru.batas; } S.terakhir = Math.max(S.terakhir || 0, baru.terakhir || 0); sinkronJawaban(); return; }
+      S = baru; clearInterval(timerId); lanjut();
+    });
+    document.addEventListener("visibilitychange", function () { if (document.hidden && S && S.status === "berlangsung") { S.keluar++; simpan(true); } });
+    window.addEventListener("pagehide", function () { if (S && S.status === "berlangsung") simpan(true); tutupLMS(); });
+  }
+  function simpanUlangCermin(st) { var t = JSON.stringify(st); try { if (localStorage.getItem(KEY) !== t) localStorage.setItem(KEY, t); } catch (e) {} idbTulis(t); }
+  mulaiApp();
+})();
+})();
+</script>
+</body>
+</html>
